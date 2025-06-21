@@ -4,8 +4,10 @@
 //
 //  Created by Tung Le on 17/06/25.
 //
+
 import SwiftUI
 import Foundation
+import SwiftData
 
 enum SwipeDirection {
     case like
@@ -15,7 +17,8 @@ enum SwipeDirection {
 
 @MainActor
 class DiscoverViewModel: ObservableObject {
-    @Environment(\.modelContext) private var modelContext
+    // Remove @Environment - this doesn't work in ObservableObject classes
+    private var modelContext: ModelContext?
 
     @Published var swipeQueue: [MangachaCard] = []
     @Published var isLoading: Bool = false
@@ -28,8 +31,14 @@ class DiscoverViewModel: ObservableObject {
     
     private var seenIds: Set<Int> = []
     
-    init(swipeQueue: [MangachaCard] = []) {
+    init(swipeQueue: [MangachaCard] = [], modelContext: ModelContext? = nil) {
         self.swipeQueue = swipeQueue
+        self.modelContext = modelContext
+    }
+    
+    // Add method to set model context
+    func setModelContext(_ context: ModelContext) {
+        self.modelContext = context
     }
     
     func preloadCards() async {
@@ -71,7 +80,19 @@ class DiscoverViewModel: ObservableObject {
         case .like:
             print("Liked: \(card.titleEnglish)")
             let saved = LikedManga(from: card)
-            modelContext.insert(saved)
+            
+            // Use the modelContext to save
+            if let context = modelContext {
+                context.insert(saved)
+                do {
+                    try context.save()
+                    print("Successfully saved: \(card.titleEnglish)")
+                } catch {
+                    print("Failed to save: \(error)")
+                }
+            } else {
+                print("ModelContext is nil - cannot save")
+            }
         case .dislike:
             print("Disliked: \(card.titleEnglish)")
         case .undo:
@@ -91,9 +112,26 @@ class DiscoverViewModel: ObservableObject {
             return
         }
         
-        guard let (card, _) = swipeHistory.popLast() else {
+        guard let (card, direction) = swipeHistory.popLast() else {
             print("No swipes to undo")
             return
+        }
+        
+        // If we're undoing a like, remove it from the database
+        if direction == .like, let context = modelContext {
+            let fetchDescriptor = FetchDescriptor<LikedManga>(
+                predicate: #Predicate { $0.id == card.id }
+            )
+            do {
+                let results = try context.fetch(fetchDescriptor)
+                if let mangaToDelete = results.first {
+                    context.delete(mangaToDelete)
+                    try context.save()
+                    print("Removed from collection: \(card.titleEnglish)")
+                }
+            } catch {
+                print("Failed to remove from collection: \(error)")
+            }
         }
         
         swipeQueue.insert(card, at: 0)

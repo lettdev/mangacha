@@ -10,11 +10,12 @@ import SwiftData
 
 @Model
 class LikedManga: Identifiable {
-    var id: Int
+    @Attribute(.unique) var id: Int
     var titleEnglish: String
     var titleJapanese: String?
     var imageUrl: String
     var synopsis: String
+    var likedDate: Date
 
     var stars: Int
     var rarity: String
@@ -33,5 +34,16 @@ class LikedManga: Identifiable {
         self.quality = card.quality.rawValue
         self.rank = card.rank
         self.popularity = card.popularity
+        self.likedDate = Date()
+    }
+    
+    // Computed property to get Rarity enum from string
+    var rarityEnum: Rarity {
+        return Rarity(rawValue: rarity) ?? .common
+    }
+    
+    // Computed property to get Quality enum from string
+    var qualityEnum: Quality {
+        return Quality(rawValue: quality) ?? .normal
     }
 }
