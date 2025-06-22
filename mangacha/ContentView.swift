@@ -16,25 +16,22 @@ struct ContentView: View {
     @State var selectedTab: Tabs = .discover
     
     var body: some View {
-        NavigationStack {
-            TabView(selection: $selectedTab) {
-                DiscoverView()
-                    .tabItem{
-                        Label("Discover", systemImage: "book")
-                    }
-                    .tag(Tabs.discover)
-                CollectionView()
-                    .tabItem{
-                        Label("Collection", systemImage: "square.grid.2x2")
-                    }
-                    .tag(Tabs.collection)
-                ProfileView()
-                    .tabItem{
-                        Label("Profile", systemImage: "person.crop.circle")
-                    }
-                    .tag(Tabs.profile)
-            }
-            .navigationTitle(title(for: selectedTab))
+        TabView(selection: $selectedTab) {
+            DiscoverView()
+                .tabItem{
+                    Label("Discover", systemImage: "book")
+                }
+                .tag(Tabs.discover)
+            CollectionView()
+                .tabItem{
+                    Label("Collection", systemImage: "square.grid.2x2")
+                }
+                .tag(Tabs.collection)
+            ProfileView()
+                .tabItem{
+                    Label("Profile", systemImage: "person.crop.circle")
+                }
+                .tag(Tabs.profile)
         }
     }
     

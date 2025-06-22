@@ -34,75 +34,75 @@ struct CollectionView: View {
 
     var body: some View {
         NavigationStack {
-            if likedManga.isEmpty {
-                VStack(spacing: 16) {
-                    Image(systemName: "heart.slash")
-                        .font(.system(size: 64))
-                        .foregroundColor(.gray)
-                    Text("No liked manga yet")
-                        .font(.title2)
-                        .foregroundColor(.gray)
-                    Text("Start discovering manga to build your collection!")
-                        .font(.body)
-                        .foregroundColor(.secondary)
-                        .multilineTextAlignment(.center)
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else {
-                VStack(spacing: 0) {
-                    // Filter section
-                    VStack {
-                        HStack {
-                            Text("Total: \(likedManga.count)")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                            Spacer()
-                            if filteredManga.count != likedManga.count {
-                                Text("Showing: \(filteredManga.count)")
+            Group {
+                if likedManga.isEmpty {
+                    VStack(spacing: 16) {
+                        Image(systemName: "heart.slash")
+                            .font(.system(size: 64))
+                            .foregroundColor(.gray)
+                        Text("No liked manga yet")
+                            .font(.title2)
+                            .foregroundColor(.gray)
+                        Text("Start discovering manga to build your collection!")
+                            .font(.body)
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.center)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                } else {
+                    VStack(spacing: 0) {
+                        // Filter section
+                        VStack {
+                            HStack {
+                                Text("Total: \(likedManga.count)")
                                     .font(.caption)
                                     .foregroundColor(.secondary)
-                            }
-                        }
-                        .padding(.horizontal)
-                        
-                        // Rarity filter
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack {
-                                Button("All") {
-                                    selectedRarity = nil
-                                }
-                                .buttonStyle(FilterButtonStyle(isSelected: selectedRarity == nil))
-                                
-                                ForEach(Rarity.allCases, id: \.self) { rarity in
-                                    Button(rarity.rawValue.capitalized) {
-                                        selectedRarity = selectedRarity == rarity ? nil : rarity
-                                    }
-                                    .buttonStyle(FilterButtonStyle(isSelected: selectedRarity == rarity))
+                                Spacer()
+                                if filteredManga.count != likedManga.count {
+                                    Text("Showing: \(filteredManga.count)")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
                                 }
                             }
                             .padding(.horizontal)
-                        }
-                    }
-                    .padding(.vertical, 8)
-                    .background(Color(.systemGroupedBackground))
-                    
-                    ScrollView {
-                        LazyVGrid(columns: [
-                            GridItem(.adaptive(minimum: 160), spacing: 12)
-                        ], spacing: 16) {
-                            ForEach(filteredManga) { item in
-                                CollectionCardView(item: item)
+                            
+                            // Rarity filter
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack {
+                                    Button("All") {
+                                        selectedRarity = nil
+                                    }
+                                    .buttonStyle(FilterButtonStyle(isSelected: selectedRarity == nil))
+                                    
+                                    ForEach(Rarity.allCases, id: \.self) { rarity in
+                                        Button(rarity.rawValue.capitalized) {
+                                            selectedRarity = selectedRarity == rarity ? nil : rarity
+                                        }
+                                        .buttonStyle(FilterButtonStyle(isSelected: selectedRarity == rarity))
+                                    }
+                                }
+                                .padding(.horizontal)
                             }
                         }
-                        .padding()
+                        .padding(.vertical, 8)
+                        .background(Color(.systemGroupedBackground))
+                        
+                        ScrollView {
+                            LazyVGrid(columns: [
+                                GridItem(.adaptive(minimum: 160), spacing: 12)
+                            ], spacing: 16) {
+                                ForEach(filteredManga) { item in
+                                    CollectionCardView(item: item)
+                                }
+                            }
+                            .padding()
+                        }
+                        .background(Color(.systemGroupedBackground))
                     }
-                    .background(Color(.systemGroupedBackground))
+                    .searchable(text: $searchText, prompt: "Search manga...")
                 }
-                .searchable(text: $searchText, prompt: "Search manga...")
             }
-        }
-        .refreshable {
-            // Refresh action if needed
+            .navigationTitle("Collection")
         }
     }
 }

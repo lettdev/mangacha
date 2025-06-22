@@ -13,33 +13,38 @@ struct DiscoverView: View {
     @Environment(\.modelContext) private var modelContext
     
     var body: some View {
-        Group {
-            if discoverModel.isLoading {
-                CardsLoading()
-            } else if let error = discoverModel.errorMessage {
-                CardsError(error: error) {
-                    Task {
-                        await discoverModel.preloadCards()
+        NavigationStack {
+            Group {
+                if discoverModel.isInCooldown {
+                    CardsCooldown(discoverModel: discoverModel)
+                } else if discoverModel.isLoading {
+                    CardsLoading()
+                } else if let error = discoverModel.errorMessage {
+                    CardsError(error: error) {
+                        Task {
+                            await discoverModel.preloadCards()
+                        }
                     }
-                }
-            } else if discoverModel.swipeQueue.isEmpty {
-                CardsOutOfStock {
-                    Task {
-                        await discoverModel.preloadCards()
+                } else if discoverModel.swipeQueue.isEmpty {
+                    CardsOutOfStock {
+                        Task {
+                            await discoverModel.preloadCards()
+                        }
                     }
+                } else {
+                    CardsLoaded(discoverModel: discoverModel)
                 }
-            } else {
-                CardsLoaded(discoverModel: discoverModel)
             }
-        }
-        .onAppear {
-            // Set the model context when the view appears
-            discoverModel.setModelContext(modelContext)
-            
-            // Load cards if queue is empty
-            if discoverModel.swipeQueue.isEmpty {
-                Task {
-                    await discoverModel.preloadCards()
+            .navigationTitle("Discover")
+            .onAppear {
+                // Set the model context when the view appears
+                discoverModel.setModelContext(modelContext)
+                
+                // Load cards if queue is empty and not in cooldown
+                if discoverModel.swipeQueue.isEmpty && discoverModel.canSwipe {
+                    Task {
+                        await discoverModel.preloadCards()
+                    }
                 }
             }
         }
