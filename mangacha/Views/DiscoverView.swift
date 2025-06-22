@@ -47,6 +47,14 @@ struct DiscoverView: View {
                     }
                 }
             }
+            .onChange(of: discoverModel.isInCooldown) { oldValue, newValue in
+                // When cooldown ends, automatically load cards
+                if oldValue && !newValue && discoverModel.swipeQueue.isEmpty {
+                    Task {
+                        await discoverModel.preloadCards()
+                    }
+                }
+            }
         }
     }
 }

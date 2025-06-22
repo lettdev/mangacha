@@ -22,7 +22,7 @@ struct CardsCooldown: View {
                     .font(.title2.bold())
                     .foregroundColor(.primary)
                 
-                Text("You've used all 16 swipes for this session")
+                Text("You've discovered all cards for this session")
                     .font(.body)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
@@ -42,22 +42,6 @@ struct CardsCooldown: View {
                     .background(.ultraThinMaterial)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
             }
-            
-            // Progress bar
-            VStack(spacing: 8) {
-                ProgressView(value: 1.0 - (discoverModel.cooldownTimeRemaining / (5 * 60)))
-                    .progressViewStyle(LinearProgressViewStyle())
-                    .frame(height: 8)
-                    .scaleEffect(x: 1, y: 2, anchor: .center)
-                    .clipShape(Capsule())
-                
-                Text("Session resets automatically")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-            .padding(.horizontal, 40)
-            
-            Spacer()
         }
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity)

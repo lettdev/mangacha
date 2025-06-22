@@ -14,39 +14,53 @@ struct SwipeableCardView: View {
     let onDragEnd: (() -> Void)?
     
     @State private var offset = CGSize.zero
-    @GestureState private var isDragging = false
+    @State private var isDragging = false
+    
+    private var rotationAngle: Double {
+        Double(offset.width / 20)
+    }
     
     var body: some View {
         CardView(card: card)
             .offset(offset)
-            .rotationEffect(.degrees(Double(offset.width / 20)))
+            .rotationEffect(.degrees(rotationAngle))
+            .scaleEffect(isDragging ? 1.05 : 1.0)
             .gesture(
                 DragGesture()
-                    .updating($isDragging) { _, state, _ in state = true }
-                    .onChanged { drag in
-                        offset = drag.translation
+                    .onChanged { gesture in
+                        isDragging = true
+                        offset = gesture.translation
                         onDragUpdate?(offset.width)
                     }
                     .onEnded { gesture in
+                        isDragging = false
+                        
                         if abs(gesture.translation.width) > 120 {
                             let direction: SwipeDirection = gesture.translation.width > 0 ? .like : .dislike
-                            withAnimation(.easeOut) {
-                                offset.width = gesture.translation.width > 0 ? 1000 : -1000
+                            
+                            // Animate the card off screen
+                            withAnimation(.easeOut(duration: 0.3)) {
+                                offset = CGSize(
+                                    width: gesture.translation.width > 0 ? 1000 : -1000,
+                                    height: gesture.translation.height
+                                )
                             }
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                            
+                            // Call the swipe action after animation
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                                 onSwipe(direction)
                                 offset = .zero
                                 onDragEnd?()
                             }
                         } else {
-                            withAnimation {
+                            // Snap back to center
+                            withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
                                 offset = .zero
                             }
                             onDragEnd?()
                         }
                     }
             )
-            .animation(.spring(), value: offset)
     }
 }
 
