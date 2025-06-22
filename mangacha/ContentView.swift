@@ -35,7 +35,6 @@ struct ContentView: View {
                     .tag(Tabs.profile)
             }
             .navigationTitle(title(for: selectedTab))
-            .navigationBarTitleDisplayMode(.inline)
         }
     }
     

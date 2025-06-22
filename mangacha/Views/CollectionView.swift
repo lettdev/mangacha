@@ -48,7 +48,6 @@ struct CollectionView: View {
                         .multilineTextAlignment(.center)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color(.systemGroupedBackground))
             } else {
                 VStack(spacing: 0) {
                     // Filter section
