@@ -13,11 +13,18 @@ struct CardsError: View {
 
     var body: some View {
         VStack {
-            Text("⚠️ \(error)")
+            Image(systemName: "xmark.circle")
+                .font(.system(size: 64))
+                .foregroundColor(.secondary)
+            Text("\(error)")
             Button("Retry") {
                 retryAction()
             }
             .padding(.top)
         }
     }
+}
+
+#Preview {
+    CardsError(error: "Error", retryAction: {})
 }

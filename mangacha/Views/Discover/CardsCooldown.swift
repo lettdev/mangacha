@@ -15,7 +15,7 @@ struct CardsCooldown: View {
             // Cooldown icon
             Image(systemName: "clock.fill")
                 .font(.system(size: 64))
-                .foregroundColor(.orange)
+                .foregroundColor(.secondary)
             
             VStack(spacing: 8) {
                 Text("Swipe Limit Reached!")
@@ -36,7 +36,6 @@ struct CardsCooldown: View {
                 
                 Text(discoverModel.cooldownTimeString)
                     .font(.system(size: 32, weight: .bold, design: .monospaced))
-                    .foregroundColor(.orange)
                     .padding(.horizontal, 20)
                     .padding(.vertical, 12)
                     .background(.ultraThinMaterial)

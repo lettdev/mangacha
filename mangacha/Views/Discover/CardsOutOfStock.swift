@@ -12,6 +12,9 @@ struct CardsOutOfStock: View {
 
     var body: some View {
         VStack {
+            Image(systemName: "square.slash")
+                .font(.system(size: 64))
+                .foregroundColor(.secondary)
             Text("You're out of cards!")
             Button("Reload") {
                 reloadAction()
@@ -19,4 +22,8 @@ struct CardsOutOfStock: View {
             .padding(.top)
         }
     }
+}
+
+#Preview {
+    CardsOutOfStock(reloadAction: {})
 }

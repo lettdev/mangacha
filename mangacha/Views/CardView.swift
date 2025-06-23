@@ -91,42 +91,29 @@ struct CardView: View {
                 
                 Spacer()
 
-                HStack(spacing: 6) {
-                    if !card.genres.isEmpty {
-                        ForEach(card.genres, id: \.self) { tag in
-                            TagView(
-                                text: tag
-                            )
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 6) {
+                        if !card.genres.isEmpty {
+                            ForEach(card.genres, id: \.self) { tag in
+                                TagView(text: tag)
+                            }
+                        }
+                        if !card.explicitGenres.isEmpty {
+                            ForEach(card.explicitGenres, id: \.self) { tag in
+                                TagView(text: tag, backgroundColor: .black)
+                            }
+                        }
+                        if !card.themes.isEmpty {
+                            ForEach(card.themes, id: \.self) { tag in
+                                TagView(text: tag, backgroundColor: .blue)
+                            }
+                        }
+                        if !card.demographics.isEmpty {
+                            ForEach(card.demographics, id: \.self) { tag in
+                                TagView(text: tag, backgroundColor: .pink)
+                            }
                         }
                     }
-                    
-                    if !card.genres.isEmpty {
-                        ForEach(card.explicitGenres, id: \.self) { tag in
-                            TagView(
-                                text: tag,
-                                backgroundColor: .black
-                            )
-                        }
-                    }
-                    
-                    if !card.genres.isEmpty {
-                        ForEach(card.themes, id: \.self) { tag in
-                            TagView(
-                                text: tag,
-                                backgroundColor: .blue
-                            )
-                        }
-                    }
-                    
-                    if !card.genres.isEmpty {
-                        ForEach(card.demographics, id: \.self) { tag in
-                            TagView(
-                                text: tag,
-                                backgroundColor: .pink
-                            )
-                        }
-                    }
-                    
                 }
                 
                 Text(card.synopsis)

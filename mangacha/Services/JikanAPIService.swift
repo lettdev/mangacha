@@ -17,7 +17,7 @@ enum JikanAPIError: Error {
 class JikanAPIService {
     static let shared = JikanAPIService()
     
-    private let baseUrl = "https://api.jikan.moe/v4/random/manga"
+    private let baseUrl = "https://api.jikan.moe/v4/random/manga?sfw"
     
     func fetchRandomMangaCard() async throws -> MangachaCard {
         guard let url = URL(string: baseUrl) else {

@@ -8,39 +8,25 @@
 import SwiftUI
 import SwiftData
 
-enum Tabs {
-    case discover, collection, profile
-}
 
 struct ContentView: View {
-    @State var selectedTab: Tabs = .discover
+    @State private var searchText: String = ""
     
     var body: some View {
-        TabView(selection: $selectedTab) {
-            DiscoverView()
-                .tabItem{
-                    Label("Discover", systemImage: "book")
-                }
-                .tag(Tabs.discover)
-            CollectionView()
-                .tabItem{
-                    Label("Collection", systemImage: "square.grid.2x2")
-                }
-                .tag(Tabs.collection)
-            ProfileView()
-                .tabItem{
-                    Label("Profile", systemImage: "person.crop.circle")
-                }
-                .tag(Tabs.profile)
+        TabView() {
+            Tab("Discover", systemImage: "book") {
+                DiscoverView()
+            }
+            Tab("Collection", systemImage: "square.grid.2x2") {
+                CollectionView()
+            }
+            Tab("Profile", systemImage: "person.crop.circle") {
+                ProfileView()
+            }
+            Tab("Search", systemImage: "magnifyingglass", role: .search) {
+            }
         }
-    }
-    
-    private func title(for tab: Tabs) -> String {
-        switch tab {
-        case .discover: return "Discover"
-        case .collection: return "Collection"
-        case .profile: return "Profile"
-        }
+        .searchable(text: $searchText)
     }
 }
 
