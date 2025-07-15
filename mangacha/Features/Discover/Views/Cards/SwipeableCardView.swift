@@ -24,7 +24,6 @@ struct SwipeableCardView: View {
         CardView(card: card)
             .offset(offset)
             .rotationEffect(.degrees(rotationAngle))
-            .scaleEffect(isDragging ? 1.05 : 1.0)
             .gesture(
                 DragGesture()
                     .onChanged { gesture in
@@ -66,23 +65,7 @@ struct SwipeableCardView: View {
 
 #Preview {
     SwipeableCardView(
-        card: MangachaCard(
-            id: 24680,
-            titleEnglish: "Berserk",
-            titleJapanese: "ベルセルク",
-            imageUrl: "https://cdn.myanimelist.net/images/manga/1/157897.jpg",
-            synopsis: "A dark fantasy saga of revenge, demonic forces, and the cursed warrior Guts. A dark fantasy saga of revenge, demonic forces, and the cursed warrior Guts. A dark fantasy saga of revenge, demonic forces, and the cursed warrior Guts. A dark fantasy saga of revenge, demonic forces, and the cursed warrior Guts. A dark fantasy saga of revenge, demonic forces, and the cursed warrior Guts. A dark fantasy saga of revenge, demonic forces, and the cursed warrior Guts.",
-            genres: ["Action", "Horror", "Fantasy"],
-            explicitGenres: [],
-            themes: [],
-            demographics: [],
-            stars: 8,
-            rarity: .legendary,
-            quality: .noir,
-            rank: 10,
-            popularity: 15,
-            status: "Hiatus"
-        ),
+        card: MockData.randomMangachaCard(),
         onSwipe: { _ in },
         onDragUpdate: nil,
         onDragEnd: nil

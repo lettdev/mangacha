@@ -18,14 +18,11 @@ struct CardActionButton: View {
     }
 }
 
-struct CardActionButton_Previews: PreviewProvider {
-    static var previews: some View {
-        CardActionButton(systemImage: "heart.fill", color: .red, highlighted: false) {
-            print("Tapped")
-        }
-        .previewLayout(.sizeThatFits)
-        .padding()
+#Preview {
+    CardActionButton(systemImage: "heart.fill", color: .red, highlighted: false) {
+        print("Tapped")
     }
+    .padding()
 }
 
 private struct ButtonGlassStyleIfAvailable: ViewModifier {

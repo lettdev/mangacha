@@ -4,6 +4,7 @@
 //
 //  Created by Tung Le on 17/06/25.
 //
+
 import Foundation
 
 struct MangachaCard: Identifiable, Codable {
@@ -12,18 +13,19 @@ struct MangachaCard: Identifiable, Codable {
     let titleJapanese: String?
     let imageUrl: String
     let synopsis: String
+    
     let genres: [String]
     let explicitGenres: [String]
     let themes: [String]
     let demographics: [String]
     
-    let stars: Int
-    let rarity: Rarity
-    let quality: Quality
-    
     let rank: Int?
     let popularity: Int?
     let status: String?
+    
+    let stars: Int
+    let rarity: Rarity
+    let quality: Quality
 }
 
 enum Rarity: String, CaseIterable, Codable {

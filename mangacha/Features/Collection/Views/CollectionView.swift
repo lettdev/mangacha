@@ -12,6 +12,7 @@ struct CollectionView: View {
     @Query(sort: [SortDescriptor(\LikedManga.likedDate, order: .reverse)])
     var likedManga: [LikedManga]
     
+    @Environment(\.modelContext) private var modelContext
     @State private var searchText = ""
     @State private var selectedRarity: Rarity?
     
@@ -30,6 +31,15 @@ struct CollectionView: View {
         }
         
         return filtered
+    }
+    
+    private func deleteManga(_ manga: LikedManga) {
+        modelContext.delete(manga)
+        do {
+            try modelContext.save()
+        } catch {
+            print("Failed to delete manga: \(error)")
+        }
     }
 
     var body: some View {
@@ -85,19 +95,20 @@ struct CollectionView: View {
                             }
                         }
                         .padding(.vertical, 8)
-                        .background(Color(.systemGroupedBackground))
                         
                         ScrollView {
                             LazyVGrid(columns: [
                                 GridItem(.adaptive(minimum: 160), spacing: 12)
                             ], spacing: 16) {
                                 ForEach(filteredManga) { item in
-                                    CollectionCardView(item: item)
+                                    CollectionCardView(item: item, onDelete: {
+                                        deleteManga(item)
+                                    })
+                                    .id(item.id) // Force view refresh with unique ID
                                 }
                             }
                             .padding()
                         }
-                        .background(Color(.systemGroupedBackground))
                     }
                     .searchable(text: $searchText, prompt: "Search manga...")
                 }

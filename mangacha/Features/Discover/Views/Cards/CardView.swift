@@ -129,32 +129,16 @@ struct CardView: View {
         .clipped()
         .background(
             RoundedRectangle(cornerRadius: 24)
-                    .stroke(card.rarity.borderColor, lineWidth: 8)
+                    .stroke(card.rarity.borderColor, lineWidth: 16)
                     .background(Color.clear)
         )
-        .padding(8)
+        .padding(16)
         .shadow(radius: 8)
     }
 }
 
 #Preview {
     CardView(
-        card: MangachaCard(
-            id: 24680,
-            titleEnglish: "Berserk",
-            titleJapanese: "ベルセルク",
-            imageUrl: "https://cdn.myanimelist.net/images/manga/1/157897.jpg",
-            synopsis: "A dark fantasy saga of revenge, demonic forces, and the cursed warrior Guts. A dark fantasy saga of revenge, demonic forces, and the cursed warrior Guts. A dark fantasy saga of revenge, demonic forces, and the cursed warrior Guts. A dark fantasy saga of revenge, demonic forces, and the cursed warrior Guts. A dark fantasy saga of revenge, demonic forces, and the cursed warrior Guts. A dark fantasy saga of revenge, demonic forces, and the cursed warrior Guts.",
-            genres: ["Action", "Horror", "Fantasy"],
-            explicitGenres: ["Gore"],
-            themes: [],
-            demographics: [],
-            stars: 8,
-            rarity: .legendary,
-            quality: .noir,
-            rank: 10,
-            popularity: 15,
-            status: "Hiatus"
-        )
+        card: MockData.randomMangachaCard()
     )
 }

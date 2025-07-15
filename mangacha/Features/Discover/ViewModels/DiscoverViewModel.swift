@@ -219,8 +219,14 @@ class DiscoverViewModel: ObservableObject {
                 do {
                     try context.save()
                     print("Successfully saved: \(card.titleEnglish)")
-                    context.processPendingChanges()
-                    self.objectWillChange.send()
+                    
+                    // Force context to process changes and notify observers
+                    try context.save()
+                    
+                    // Trigger UI update by sending objectWillChange
+                    DispatchQueue.main.async {
+                        self.objectWillChange.send()
+                    }
                 } catch {
                     print("Failed to save: \(error)")
                 }

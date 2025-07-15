@@ -72,16 +72,19 @@ struct CardGenerator {
             titleJapanese: api.titleJapanese,
             imageUrl: imageUrl,
             synopsis: api.synopsis ?? "No synopsis available.",
+            // genres
             genres: genres,
             explicitGenres: explicitGenres,
             themes: themes,
             demographics: demographics,
-            stars: generateStars(from: api.rank),
-            rarity: generateRarity(from: api.popularity),
-            quality: generateRandomQuality(),
+            // stats
             rank: api.rank,
             popularity: api.popularity,
-            status: api.status
+            status: api.status,
+            // qualities
+            stars: generateStars(from: api.rank),
+            rarity: generateRarity(from: api.popularity),
+            quality: generateRandomQuality()
         )
     }
 }
